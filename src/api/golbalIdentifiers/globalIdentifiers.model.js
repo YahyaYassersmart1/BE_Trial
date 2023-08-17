@@ -1,15 +1,19 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const organizationSchema = new Schema({
-    org_id: {
+const globalIdentifierSchema = new Schema({
+    identifier_id: {
         type: String,
         required: true,
         unique: true
     },
-    org_name: {
+    name: {
         type: String,
         required: true
+    },
+    description: {
+        type: String,
+        required: false
     },
     createdAt: {
         type: Date,
@@ -23,6 +27,6 @@ const organizationSchema = new Schema({
     timestamps: true
 });
 
-const Organization = mongoose.model('Organization', organizationSchema);
+const GlobalIdentifier = mongoose.model('GlobalIdentifier', globalIdentifierSchema);
 
-module.exports = Organization;
+module.exports = GlobalIdentifier;

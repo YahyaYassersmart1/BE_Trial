@@ -1,22 +1,56 @@
-const Organization = require('./organization.model');
+const OrganizationService = require('./organization.service');
+const logger = require('../../utils/logger');
 
-exports.createOrganization = async (req, res) => {
-    const organization = new Organization(req.body);
-    await organization.save();
-    res.status(201).send('Organization Created');
-};
+class OrganizationController {
+    static async createOrganization(req, res) {
+        try {
+            const organization = await OrganizationService.createOrganization(req.body);
+            res.status(201).send(organization);
+        } catch (error) {
+            logger.error(error.message);
+            res.status(400).send(error.message);
+        }
+    }
 
-exports.getOrganizations = async (req, res) => {
-    const organizations = await Organization.find();
-    res.status(200).json(organizations);
-};
+    static async getOrganization(req, res) {
+        try {
+            const organization = await OrganizationService.getOrganizationById(req.params.id);
+            res.send(organization);
+        } catch (error) {
+            logger.error(error.message);
+            res.status(404).send(error.message);
+        }
+    }
 
-exports.updateOrganization = async (req, res) => {
-    await Organization.findByIdAndUpdate(req.params.org_id, req.body);
-    res.status(200).send('Organization Updated');
-};
+    static async updateOrganization(req, res) {
+        try {
+            const organization = await OrganizationService.updateOrganization(req.params.id, req.body);
+            res.send(organization);
+        } catch (error) {
+            logger.error(error.message);
+            res.status(400).send(error.message);
+        }
+    }
 
-exports.deleteOrganization = async (req, res) => {
-    await Organization.findByIdAndDelete(req.params.org_id);
-    res.status(200).send('Organization Deleted');
-};
+    static async deleteOrganization(req, res) {
+        try {
+            await OrganizationService.deleteOrganization(req.params.id);
+            res.send({ message: 'Organization deleted successfully' });
+        } catch (error) {
+            logger.error(error.message);
+            res.status(400).send(error.message);
+        }
+    }
+
+    static async getAllOrganizations(req, res) {
+        try {
+            const organizations = await OrganizationService.getAllOrganizations();
+            res.send(organizations);
+        } catch (error) {
+            logger.error(error.message);
+            res.status(400).send(error.message);
+        }
+    }
+}
+
+module.exports = OrganizationController;

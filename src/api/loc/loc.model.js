@@ -1,14 +1,20 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const organizationSchema = new Schema({
-    org_id: {
+const locSchema = new Schema({
+    loc_id: {
         type: String,
         required: true,
         unique: true
     },
-    org_name: {
+    type: {
         type: String,
+        enum: ['single', 'dual'],
+        required: true
+    },
+    location_id: {
+        type: String,
+        ref: 'Location',
         required: true
     },
     createdAt: {
@@ -23,6 +29,6 @@ const organizationSchema = new Schema({
     timestamps: true
 });
 
-const Organization = mongoose.model('Organization', organizationSchema);
+const LOC = mongoose.model('LOC', locSchema);
 
-module.exports = Organization;
+module.exports = LOC;
